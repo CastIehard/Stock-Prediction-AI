@@ -1,0 +1,40 @@
+\documentclass[12pt]{article}
+\input{preamble.tex}
+
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+	\Title{Predicting Stock Prices with Artificial Intelligence using Historical and Live Data}
+	\Author{Luca Burghard}
+	\Language{EN}
+\end{filecontents*}
+
+\usepackage{colorprofiles}
+\usepackage[a-2u,mathxmp]{pdfx}[2018/12/22]
+\hypersetup{pdfstartview=}
+
+\begin{document}
+\JMUTitle
+\clearpage
+\pagenumbering{Roman}
+\setcounter{page}{1}
+\input{affidavit.tex}
+\input{abstract.tex}
+\lhead{Contents}
+\tableofcontents
+\newpage
+\input{tables.tex}%Verzeichnisse aller Art
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\lhead{\nouppercase{\leftmark}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Introduction/Introduction.tex}
+\input{Mainpart/Mainpart.tex}
+\input{Conclusion/Conclusion.tex}
+\clearpage
+\pagenumbering{Roman}
+\setcounter{page}{10}
+\lhead{References\hfill Study Paper, Burghard}
+\addcontentsline{toc}{section}{\bibname}
+\printbibliography
+\end{document}

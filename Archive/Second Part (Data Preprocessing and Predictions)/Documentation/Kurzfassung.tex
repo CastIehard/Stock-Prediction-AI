@@ -1,0 +1,29 @@
+\markboth{Kurzfassung}{}
+
+\section*{Kurzfassung}\label{sec: Kurzfassung}
+Diese Arbeit behandelt die praktische Anwendung von Machine Learning Modellen zur Vorhersage von Aktienkursen, speziell am Beispiel von Adobe Inc. Die Untersuchung basiert auf Daten, die täglich von einem Raspberry Pi gesammelt und per API-Anfragen von verschiedenen Providern bezogen werden. Der Untersuchungszeitraum erstreckt sich vom 07.11.2023 bis zum 15.04.2024, und die gesammelten Daten umfassen insgesamt 161 Tage, die in einer CSV-Datei gespeichert wurden.
+\par
+Der Kern der Arbeit besteht aus der Implementierung eines Rahmenprogramms, das einen standardisierten Ablauf für das Laden, Verarbeiten und Trainieren der Machine Learning Modelle bietet. Innerhalb dieses Rahmens werden verschiedene Modelle, wie Lineare Regression und Neurale Netzwerke, unter Verwendung von Techniken wie GridSearch und RandomizedSearchCV auf ihre Effektivität geprüft.
+\par
+Die Modelle werden dann auf die aufbereiteten Daten angewendet, wobei Schritte wie das Normalisieren der Daten, die Berechnung von Sentiment Scores aus Nachrichtentexten und das Hinzufügen weiterer  Features durchgeführt werden. Die Ergebnisse des Modelltrainings werden mittels Mean Squared Error und R2 Score evaluiert und verglichen. Dabei wird untersucht, wie unterschiedliche Datenverarbeitungsschritte die Vorhersagegenauigkeit beeinflussen.
+\par
+Abschließend wird ein Modell ausgewählt, das am besten performt, um die tägliche Preisveränderung von Adobe-Aktien vorherzusagen. Es wird eine Methode entwickelt, um aus den Vorhersagen Handelssignale zu generieren. Dazu wird Optuna verwendet, um optimale Schwellwerte für Kauf- und Verkaufssignale zu bestimmen, basierend auf simulierten Handelsstrategien, die darauf abzielen, den Depotwert zu maximieren. Die Ergebnisse zeigen, dass bestimmte Modellkonfigurationen und Schwellwerte das Potenzial bieten, profitable Handelssignale zu generieren.
+\par
+Die Arbeit schließt mit einer Diskussion der Ergebnisse und der Darstellung der Kauf- und Verkaufssignale über die Zeit. Dies bietet eine visuelle Repräsentation der Leistung der Modelle und der Effektivität der Handelsstrategie im Untersuchungszeitraum.
+
+\clearpage
+
+\markboth{Abstract}{}
+
+\section*{Abstract}\label{sec: Abstract}
+This thesis deals with the practical application of machine learning models to predict stock prices, specifically using the example of Adobe Inc. The study is based on data collected daily from a Raspberry Pi and obtained via API requests from various providers. The study period extends from 07.11.2023 to 15.04.2024, and the collected data comprises a total of 161 data points stored in a CSV file.
+\par
+In the first part of the work, the data is obtained and analyzed. This includes loading the data into a DataFrame, outputting the first lines to check the data structure, analyzing for missing values and checking the data types. The data is made up of various data formats, including numerical values with and without decimal places, as well as news about the share and its CEO.
+\par
+The core of the work consists of implementing a framework that provides a standardized flow for loading, processing and training the machine learning models. Within this framework, different models, such as Linear Regression and KNN, are tested for their effectiveness using techniques such as GridSearch and RandomizedSearchCV, that focus on optimizing the hyperparameters.
+\par
+The models are then applied to the processed data, performing steps such as normalizing the data, calculating sentiment scores from message texts and adding other relevant features. The results of the model training are evaluated and compared using Mean Squared Error and R2 Score. It is investigated how different data processing steps influence the prediction accuracy.
+\par
+Finally, a model is selected that performs best to predict the daily price change of Adobe shares. A method is developed to generate trading signals from the predictions. Optuna is used to determine optimal thresholds for buy and sell signals based on simulated trading strategies that aim to maximize portfolio value. The results show that certain model configurations and thresholds offer the potenzial to generate profitable trading signals.
+\par
+The paper concludes with a discussion of the results and the plotting of buy and sell signals over time. This provides a visual representation of the performance of the models and the effectiveness of the trading strategy over the study period.

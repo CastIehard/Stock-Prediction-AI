@@ -1,0 +1,162 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Zusaetzliche Pakete  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sloppy
+
+\usepackage{enumerate}%Für Aufzählungen
+\usepackage{fancyhdr}%Für Kopf- und Fußzeile
+\usepackage{a4wide}%Für breitere Seiten
+\usepackage{graphicx}%Für Bilder
+\usepackage{float}%Für Bilder
+\usepackage{subcaption}%Für Bilder
+\usepackage{titlesec}%Für Formatierung der Überschriften
+\usepackage{enumitem}%Für Aufzählungen
+\usepackage{xcolor}%Für Farben
+\usepackage{parskip}%Für Abstand zwischen Absätzen
+
+%To include code
+\usepackage{listings}
+\renewcommand{\lstlistlistingname}{Codeverzeichnis}
+\renewcommand{\lstlistingname}{Code} % Optional, ändert die Beschriftung einzelner Listings
+\lstset{
+    basicstyle=\ttfamily\small\color{white}, % Sets the basic style
+    backgroundcolor=\color{black},           % Sets background color to black
+    commentstyle=\color{green},              % Comment color
+    keywordstyle=\color{cyan},               % Keyword color
+    stringstyle=\color{red},                 % String literal color
+    showstringspaces=false,                  % Do not show spaces in strings as special character
+    numbers=left,                            % Line numbers on the left
+    numberstyle=\tiny\color{gray},           % Style of line numbers
+    breaklines=true,                         % Automatic line breaking
+    captionpos=b,                            % Sets the caption position to bottom
+    frame=single                             % Adds a frame around the code
+}
+
+\usepackage{colortbl}%Für Farben in Tabellen
+\usepackage{caption}%Für Bildunterschriften
+\usepackage{nameref}%Für Verweise auf Namen
+
+\usepackage[utf8]{inputenc}%Für Umlaute
+\usepackage[ngerman]{babel}%Für deutsche Sprache
+\usepackage{lmodern} %Für Schriftart
+\usepackage{booktabs} %Für Tabellen
+\usepackage{hyperref}%Für Hyperlinks
+
+\usepackage[TS1,T1]{fontenc}%Für Schriftart
+\usepackage{fourier, heuristica}%Für Schriftart
+\usepackage{array}%Für Tabellen
+
+\newcommand{\foo}{\makebox[0pt]{\textbullet}\hskip-0.5pt\vrule width 1pt\hspace{\labelsep}}
+
+\usepackage{flowchart}%Für Flussdiagramme
+\usetikzlibrary{calc}%Für Flussdiagramme
+\usepackage{makecell,tabularx} %Für Tabellen
+\renewcommand\theadfont{\small}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\usepackage{siunitx}
+\usepackage{amsmath}
+\usepackage{helvet}%Für Arial Font
+\renewcommand{\familydefault}{\sfdefault}%Für Arial Font
+\usepackage{setspace} %Zeilenabstand
+\onehalfspacing{} % Aktiviere den eineinhalbfachen Zeilenabstand
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry} % Randabstand 2,5 cm
+\usepackage{tcolorbox}
+% Definition der Box mit schwarzem Rahmen
+\newtcolorbox{blackframebox}{
+	colframe=black, % Rahmenfarbe der Box
+	boxrule=1pt, % Rahmendicke
+	arc=0pt, % Abrundung der Ecken
+	boxsep=5pt, % Abstand zwischen Text und Rahmen
+	left=5pt, % Linker Randabstand
+	right=5pt, % Rechter Randabstand
+	top=5pt, % Oberer Randabstand
+	bottom=0pt % Unterer Randabstand
+}
+
+\usepackage[sorting=nyt, backend=biber, style=authoryear]{biblatex}
+\setlength{\bibitemsep}{2\itemsep}%Distance between lines in literature
+\usepackage{csquotes}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{placeins}
+\usepackage{colorprofiles}
+\usepackage{algorithm} 
+\usepackage[export]{adjustbox}
+
+\addbibresource{Literatur.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Definition der Kopfzeile %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{Studienarbeit, Luca Burghard}
+\setlength{\headheight}{15pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Definition der Fußzeile %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\fancyfoot[C]{Seite \thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Definition des Deckblattes und der Titelseite  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\CustomTitle}[0]{
+	\thispagestyle{empty}
+	\begin{figure}
+		\begin{minipage}{0.4\linewidth}
+			\includegraphics[height=2.0cm,left]{Bilder/SEWLogo.JPG} 
+		\end{minipage} 
+		\hfill
+		\begin{minipage}{0.4\linewidth}
+			\includegraphics[height=2.0cm,right]{Bilder/DHLogo.JPG} 
+		\end{minipage}
+	\end{figure}
+  
+  \vspace*{\stretch{1}}
+  \begin{center}
+    \vspace*{\stretch{0.5}}
+    \sffamily\bfseries\Huge Vorhersage von Aktienwerten mit maschinellem Lernen\\
+
+	\vspace*{\stretch{0.5}}
+    \sffamily\bfseries\Huge Studienarbeit\\	 
+
+    \vspace*{\stretch{0.5}}
+    \sffamily\bfseries\large
+	von
+    \\
+   	Luca Burghard\\
+    \vspace*{\stretch{0.5}}
+    \sffamily\small
+  \end{center}
+
+  \vspace*{\stretch{1}}
+
+   \begin{tabular}{l l}
+	Bearbeitungszeitraum: & 25.03.2024 - 07.06.2024\\
+	Immatrikulationsnummer: & 9209388\\
+	Kurs: & TMT21B2\\
+	Studiengang: & Mechatronik\\
+	Hochschule: & Duale Hochschule Baden Württemberg Karlsruhe\\ 
+	Abgabetermin: & 07.06.2024\\
+	Prüfer: & Steffen Quadt\\
+    \end{tabular}
+ \newpage
+}
+
+\titlespacing*{\section}
+{0pt}{3.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{1.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+\titlespacing*{\subsubsection}
+{0pt}{1.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+
+\setcounter{tocdepth}{2}%Tiefe des Inhaltsverzeichnisses
+\setcounter{secnumdepth}{3}%Nummerierung der Überschriften
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Beginn des Dokuments  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%

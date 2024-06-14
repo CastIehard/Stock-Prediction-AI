@@ -1,0 +1,203 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Zusaetzliche Pakete  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{a4wide}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage[printonlyused]{acronym}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{caption}
+
+%To write code here
+\usepackage{listings}
+\lstset{
+	language=bash,
+	basicstyle=\ttfamily\color{blue},
+	backgroundcolor=\color{lightgray},
+	frame=single,
+	rulecolor=\color{black},
+	keywordstyle=\color{purple},
+	commentstyle=\color{red},
+	numbers=none
+}
+%To referece the name of a chapter
+\usepackage{nameref}
+%For Mindmap
+\usepackage{tikz}
+\usetikzlibrary{mindmap,trees}
+\usetikzlibrary{shapes, arrows, matrix}%Das gehört nichts dazu
+\usepackage{verbatim}
+
+
+\usepackage[utf8]{inputenc} 
+\usepackage[english]{babel}
+\usepackage{lmodern} 
+\usepackage{booktabs} 
+\usepackage[hidelinks]{hyperref}
+%\hypersetup{
+%	colorlinks=true,
+%	linkcolor=black,
+%	urlcolor=black,
+%	citecolor=black
+%}
+
+
+
+\usepackage[TS1,T1]{fontenc}
+\usepackage{fourier, heuristica}
+\usepackage{array}
+
+\newcommand{\foo}{\makebox[0pt]{\textbullet}\hskip-0.5pt\vrule width 1pt\hspace{\labelsep}}
+
+\newcommand\zeilenabstand{10pt} 
+
+\tikzset{vp/.style={circle,fill,inner sep=2pt}} 
+\newcommand\verbindungslinie[3]{ 
+	\node[#1,vp]at([yshift=-.15*\zeilenabstand]#2.south){};
+	\foreach [remember=\p as \lastp (initially #2)] \p in {#3} 
+	\draw[ultra thick,#1,draw opacity=.4]([yshift=-.15*\zeilenabstand]\lastp.south)--([yshift=-.15*\zeilenabstand]\p.south)node[vp]{}; 
+} 
+
+\usepackage{flowchart}
+\usetikzlibrary{calc}
+\usepackage{makecell,tabularx} %Für Tabellen
+\renewcommand\theadfont{\small}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\usepackage{siunitx}
+\usepackage{amsmath}
+\usepackage{helvet}%Für Arial Font
+\renewcommand{\familydefault}{\sfdefault}%Für Arial Font
+\usepackage{setspace} %Zeilenabstand
+\onehalfspacing % Aktiviere den eineinhalbfachen Zeilenabstand
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry} % Randabstand 2,5 cm
+\usepackage{tcolorbox}
+% Definition der Box mit schwarzem Rahmen
+\newtcolorbox{blackframebox}{
+	colframe=black, % Rahmenfarbe der Box
+	boxrule=1pt, % Rahmendicke
+	arc=0pt, % Abrundung der Ecken
+	boxsep=5pt, % Abstand zwischen Text und Rahmen
+	left=5pt, % Linker Randabstand
+	right=5pt, % Rechter Randabstand
+	top=5pt, % Oberer Randabstand
+	bottom=0pt % Unterer Randabstand
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily,%\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=3pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[sorting=none, backend=bibtex, style=numeric]{biblatex}
+\setlength{\bibitemsep}{2\itemsep}%Distance between lines in literature
+\usepackage{csquotes}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{placeins}
+\usepackage{algorithm} 
+\usepackage[export]{adjustbox}
+
+\addbibresource{./bib/BibMaster.bib}
+
+\AtEveryBibitem{
+	\clearfield{volume}
+	\clearfield{number}
+	\clearfield{pages}}
+
+\setlength{\parindent}{0em} 
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{noitemsep, topsep=0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Definition der Kopfzeile %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+\setlength{\headheight}{16pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Definition des Deckblattes und der Titelseite  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\JMUTitle}[0]{
+	\thispagestyle{empty}
+    \begin{figure}
+    	\begin{minipage}{0.4\linewidth}
+    		\includegraphics[height=2.0cm,left]{DHLogo.jpg} 
+    	\end{minipage} 
+    \end{figure}
+  
+  \vspace*{\stretch{1}}
+  \begin{center}
+    \vspace*{\stretch{0.5}}
+    \sffamily\bfseries\Huge Study Paper, T3100: \\
+    Predicting Stock Prices with Artificial Intelligence using Historical and Real-Time Data\\
+    	    
+    \vspace*{\stretch{0.5}}
+    \sffamily\bfseries\large
+    by\\
+   	Luca Burghard\\
+    \vspace*{\stretch{0.5}}
+    \sffamily\small
+  \end{center}
+
+
+  \vspace*{\stretch{1}}
+
+   \begin{tabular}{l l}
+	Matriculation Number: & 9209388\\
+	Course: & TMT21B2\\
+	Study Program: & Mechatronics\\
+	University: & Cooperative State University Baden-Wuerttemberg Karlsruhe\\ 
+	Submission Date: & 22.12.2023\\
+	Auditor: & Steffen Quadt
+    \end{tabular}
+ \newpage
+}
+
+\titlespacing*{\section}
+{0pt}{3.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{1.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+\titlespacing*{\subsubsection}
+{0pt}{1.5ex plus 1ex minus .2ex}{.2ex plus .2ex}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\newcommand{\nl}{\textcolor{red}{~[?]}}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+\newcommand{\invtabitem}{~~\llap{\textcolor{white}{\textbullet}}~~}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=0.5pt] (char){#1};}}
+\renewcommand{\dateseparator}{.}
+\renewcommand{\floatpagefraction}{.8}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Beginn des Dokuments  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,14 @@
+pandas          #for data manipulation
+requests        #for making api requests
+transformers    #for finbert
+matplotlib      #for plotting
+optuna          #hyperparameter optimization
+scikit-learn    #machine learning
+pyarrow         #needed for pandas
+jupyter         #for jupyter notebook
+torch            #for pytorch
+optuna          #for hyperparameter optimization
+jupyter         #for jupyter notebook
+ipykernel       #for jupyter notebook
+
+
