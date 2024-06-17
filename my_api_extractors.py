@@ -11,9 +11,10 @@ def extract_global_quote(data):
 def extract_news_sentiment(data):
     if "feed" in data:
         news_scores = [item["overall_sentiment_score"] for item in data["feed"]]
+        mean_score = sum(news_scores) / len(news_scores) if len(news_scores) > 0 else 0
         return {
             'alpha_news_amount': len(news_scores),
-            'news_sentiment_mean': sum(news_scores) / len(news_scores)
+            'news_sentiment_mean': mean_score
         }
     return {'alpha_news_amount': 0, 'news_sentiment_mean': 0}
 

@@ -4,16 +4,6 @@ from transformers import BertTokenizer, BertForSequenceClassification, pipeline
 from my_api_extractors import *
 import pandas as pd
 
-def makefolder(name: str):
-    """
-    Create a folder with the given name if it does not exist.
-    """
-    if not os.path.exists(name):
-        os.makedirs(name, exist_ok=True)
-        print(f'Folder {name} created')
-    else: 
-        print(f'Folder {name} already exists')
-
 def get_news(topic: str, date: str,api_key:str):
     """
     Get news articles based on a given topic and date.
@@ -28,23 +18,28 @@ def get_news(topic: str, date: str,api_key:str):
     - amount (int): The number of news articles found.
     """
     url = f'https://newsapi.org/v2/everything?q={topic}&from={date}&sortBy=publishedAt&apiKey={api_key}'  
+
     request = requests.get(url)
     data = request.json()
-    amount = int(data["totalResults"])
-
-    if amount > 0:
-        if amount > 99: amount = 99
-        news_list = []
-        for i in range(amount):
-            title = data["articles"][i]["title"]
-            news_list.append(title)
-            description = data["articles"][i]["description"]
-            news_list.append(description)         
+    if check_api_error(data):
+        print("Something went wrong with the API request of Newsapi.org")
+        return [], 0
     else:
-        news_list = []
-        amount = 0
-    print(f'Found {amount} news articles for {topic} on {date}')
-    return news_list, amount
+        amount = int(data["totalResults"])
+
+        if amount > 0:
+            if amount > 99: amount = 99
+            news_list = []
+            for i in range(amount):
+                title = data["articles"][i]["title"]
+                news_list.append(title)
+                description = data["articles"][i]["description"]
+                news_list.append(description)         
+        else:
+            news_list = []
+            amount = 0
+        print(f'Found {amount} news articles for {topic} on {date}')
+        return news_list, amount
 
 def download_finbert(path:str):
     """
@@ -78,35 +73,43 @@ def list_finbert(string_list: list, path: str):
     nlp = pipeline("sentiment-analysis", model=finbert, tokenizer=tokenizer)
     # Return 0 immediately if input is "0"
     if string_list == "0":
+        print(f'Topic list: {string_list} -> Sentiment: 0')
         return 0
+    else:
+        scores = []
+        for text in string_list:
+            # Truncate text to fit tokenization limit
+            if text is None:
+                #skip to the next text
+                continue
+            while len(tokenizer.tokenize(text)) > 500:
+                text = text[:-1]
 
-    scores = []
-    for text in string_list:
-        # Truncate text to fit tokenization limit
-        if text is None:
-            #skip to the next text
-            continue
-        while len(tokenizer.tokenize(text)) > 500:
-            text = text[:-1]
-
-        # Analyze text with finbert
-        results = nlp(text)
-        for item in results:
-            score = item['score']
-            label = item['label']
-            # Convert label to numerical value and multiply by score
-            if label == "Neutral":
-                scores.append(0)
-            elif label == "Negative":
-                scores.append(-1 * score)
-            elif label == "Positive":
-                scores.append(1 * score)
-    score = sum(scores) / len(scores) if scores else 0#
-    print(f'Topic list: {string_list} -> Sentiment: {score}')
-    return score
-    
+            # Analyze text with finbert
+            results = nlp(text)
+            for item in results:
+                score = item['score']
+                label = item['label']
+                # Convert label to numerical value and multiply by score
+                if label == "Neutral":
+                    scores.append(0)
+                elif label == "Negative":
+                    scores.append(-1 * score)
+                elif label == "Positive":
+                    scores.append(1 * score)
+        try:
+            score = sum(scores) / len(scores)
+            print(f'Topic list: {string_list} -> Sentiment: {score}')
+            return score
+        except ZeroDivisionError:
+            score = 0
+            print(f'Topic list: {string_list} -> Sentiment: {score}')
+            return score
+        
 def check_api_error(json_response):
     if "Information" in json_response and "rate limit" in json_response["Information"]:
+        return True
+    if json_response.get('status') == 'error':
         return True
     return False
 
