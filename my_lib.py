@@ -163,9 +163,14 @@ def get_stock_info(ticker: str, api_key: str, date: str):
         else:
             for key, extractor in data_extractors.items():
                 if key in url:
-                    extracted_data = extractor(data)
-                    combined_data.update(extracted_data)
-                    print(f'{key} data extracted')
+                    try:
+                        extracted_data = extractor(data)
+                        combined_data.update(extracted_data)
+                        print(f'{key} data extracted')
+                    except:
+                        print(f'Error extracting {key} data')
+                        print(f'From url: {url}')
+                        return pd.DataFrame({'API rate limit reached': [99999]})
 
     df = pd.DataFrame([combined_data])
     return df
