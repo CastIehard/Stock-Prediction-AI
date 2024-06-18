@@ -20,7 +20,6 @@ def extract_news_sentiment(data):
 
 def extract_currency_exchange_rate(data):
     return {
-        'date_currency_exchange_rate': data["Realtime Currency Exchange Rate"]["6. Last Refreshed"],
         'currency_exchange_rate': data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
     }
 
