@@ -3,8 +3,7 @@ name: Collect data every day at 1 a.m and Push Changes
 on:
   schedule:
     - cron: '0 1 * * *'  # Schedule to run daily at 1 a.m. UTC
-# make code manually runable 
-  workflow_dispatch:
+  workflow_dispatch:  # Make the workflow manually runnable
 
 permissions:
   contents: write  # Grant write permissions to the workflow
@@ -32,7 +31,6 @@ jobs:
       env:
         ALPHA_API_KEY: ${{ secrets.ALPHA_API_KEY }}
         NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-        
       run: python collector.py
       
     - name: Commit and Push with AccessToken
@@ -44,3 +42,16 @@ jobs:
         git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
 
+    - name: Run signal_generator.py and depot_manager.py
+      run: |
+        python signal_generator.py
+        python depot_manager.py
+
+    - name: Commit and Push Signals with AccessToken
+      run: |
+        git config --global user.name 'ActionBot'
+        git config --global user.email 'luca.burghard@web.de'
+        git add .
+        git commit -m "Buy or Sell Signal calculated"
+        git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
+        git push

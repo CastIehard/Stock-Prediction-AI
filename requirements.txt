@@ -4,3 +4,4 @@ torch
 jupyter
 transformers
 scikit-learn
+joblib

@@ -1,7 +1,7 @@
 import pandas as pd
+import joblib
 
 df_stocks = pd.read_csv('tracked_stocks.csv')
-
 
 def datapreprocessing(data):
     data["date"] = pd.to_datetime(data["date_collection"], format="%Y-%m-%d")
@@ -26,12 +26,12 @@ def datapreprocessing(data):
     
 for index, row in df_stocks.iterrows():
     name = row['name']
-    print(f'Running Simulation for {name}')
+    print(f'Generating Signal using pretrained Model for {name}')
     path = 'Stocks/' + name + '/'
 
     #load model
-    import joblib
-    model = joblib.load('model_20240702_LR.pkl')
+
+    model = joblib.load('model_20240703_LR.pkl')
     #load new data
     data = pd.read_csv(path + 'data.csv')
     #use last 3 days
