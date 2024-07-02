@@ -71,6 +71,6 @@ today = pd.Timestamp.now().strftime("%Y%m%d")
 model_name = f"model_{today}_LR.pkl"
 joblib.dump(model, f'{model_name}')
 
-features["target"] = target
-features.to_csv('data_used_for_training.csv', index=False)
+#features["target"] = target
+#features.to_csv('data_used_for_training.csv', index=False)
 
