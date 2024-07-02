@@ -39,3 +39,16 @@ for index, row in df_stocks.iterrows():
     #save prediction
     data['prediction'] = prediction
     data.to_csv(path + 'prediction.csv', index=False)
+
+    fee = 1 #1€ fee for buying or selling
+    sell_percentage = 0.5
+    buy_threshold = 0.5
+    sell_threshold = -0.5
+
+    #get latest prediction
+    latest_prediction = data['prediction'].iloc[-1]
+    print(f'Latest prediction for {name}: {latest_prediction} %')
+    if latest_prediction >= buy_threshold:
+        print(f'Buy signal for {name}')
+    elif latest_prediction <= sell_threshold:
+        print(f'Sell signal for {name}')
