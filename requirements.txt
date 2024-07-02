@@ -1,4 +1,6 @@
 requests
 pandas
-transformers
 torch
+jupyter
+transformers
+scikit-learn
