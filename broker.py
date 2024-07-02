@@ -1,7 +1,4 @@
 import pandas as pd
-import my_lib
-from datetime import datetime,timedelta
-import os
 
 df_stocks = pd.read_csv('tracked_stocks.csv')
 
@@ -23,17 +20,14 @@ def datapreprocessing(data):
     data_features = data[features_list]
     
     data_features = data_features.reindex(sorted(data_features.columns), axis=1)
-    data_features.to_csv('data_features_from_model_broker.csv', index=False)
+    #data_features.to_csv('data_features_from_model_broker.csv', index=False)
     return data_features
     
-
 for index, row in df_stocks.iterrows():
     name = row['name']
-    ticker = row['ticker']
-    ceo = row['ceo']
     print(f'Running Simulation for {name}')
-
     path = 'Stocks/' + name + '/'
+
     #load model
     import joblib
     model = joblib.load('model_20240702_LR.pkl')

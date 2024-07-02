@@ -51,10 +51,10 @@ def create_statistics_csv(original_df, output_csv_path):
     statistics_df.to_csv(output_csv_path, index=False)
 create_statistics_csv(data_features, 'normalizaton_stats.csv')
 
-data_features = data_features.sub(data_features.mean(axis=0), axis=1).div((data_features.max(axis=0)-data_features.min(axis=0)), axis=1)
+# data_features = data_features.sub(data_features.mean(axis=0), axis=1).div((data_features.max(axis=0)-data_features.min(axis=0)), axis=1)
 #sort columns alphabetically
 data_features = data_features.reindex(sorted(data_features.columns), axis=1)
-data_features.to_csv('data_features_from_model_maker.csv', index=False)
+#data_features.to_csv('data_features_from_model_maker.csv', index=False)
 
 
 
@@ -70,3 +70,7 @@ import joblib
 today = pd.Timestamp.now().strftime("%Y%m%d")
 model_name = f"model_{today}_LR.pkl"
 joblib.dump(model, f'{model_name}')
+
+features["target"] = target
+features.to_csv('data_used_for_training.csv', index=False)
+
