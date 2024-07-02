@@ -21,16 +21,7 @@ def datapreprocessing(data):
     preprocessing_information = pd.read_csv('normalizaton_stats.csv')
     features_list = preprocessing_information['Column Name'].tolist()
     data_features = data[features_list]
-
-    for column in data_features.columns:
-        mean = preprocessing_information[preprocessing_information['Column Name'] == column]['Mean'].values[0]
-        max = preprocessing_information[preprocessing_information['Column Name'] == column]['Max'].values[0]
-        min = preprocessing_information[preprocessing_information['Column Name'] == column]['Min'].values[0]
-        data_features[column] = data_features[column].sub(mean).div(max-min)
     
-    data_features = data_features.sub(mean, axis=1).div((max-min), axis=1)
-
-    #sort columns alphabetically
     data_features = data_features.reindex(sorted(data_features.columns), axis=1)
     data_features.to_csv('data_features_from_model_broker.csv', index=False)
     return data_features

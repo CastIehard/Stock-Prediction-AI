@@ -32,6 +32,7 @@ for column in data.columns[1:]:
             features.append(column)
 
 data_features = data[features]
+
 def create_statistics_csv(original_df, output_csv_path):
     statistics = {
         'Column Name': [],
@@ -48,6 +49,7 @@ def create_statistics_csv(original_df, output_csv_path):
 
     statistics_df = pd.DataFrame(statistics)
     statistics_df.to_csv(output_csv_path, index=False)
+create_statistics_csv(data_features, 'normalizaton_stats.csv')
 
 data_features = data_features.sub(data_features.mean(axis=0), axis=1).div((data_features.max(axis=0)-data_features.min(axis=0)), axis=1)
 #sort columns alphabetically
