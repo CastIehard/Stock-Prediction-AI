@@ -32,17 +32,13 @@ def preprocess_data(data):
     data.fillna(0.0, inplace=True)
         
     # Sort columns alphabetically
-    print("Sorting columns alphabetically...")
     data = data.reindex(sorted(data.columns), axis=1)
     data.fillna(0.0, inplace=True)
     # Drop any date-related columns explicitly
     data.drop(columns=data.filter(like='date').columns, inplace=True)
     return data
 
-def select_and_normalize_with_stats(data, features_list, preprocessing_information):
-    # Only keep the features used in the model
-    data_features = data[features_list] 
-    # Normalize the data
+def normalize_with_stats(data_features,preprocessing_information):
     data_features = data_features.sub(preprocessing_information.set_index('Column Name')['Mean'], axis=1)
     data_features = data_features.div(preprocessing_information.set_index('Column Name')['Max'] - preprocessing_information.set_index('Column Name')['Min'], axis=1)
     return data_features
