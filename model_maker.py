@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import joblib
-from preprocessing_utils import *
+from my_lib import *
 # Load and preprocess the data
 print("Loading data...")
 data = pd.read_csv("training_dataset_adobe_191_days.csv")

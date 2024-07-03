@@ -1,6 +1,6 @@
 import pandas as pd
 import joblib
-from preprocessing_utils import *
+from my_lib import *
 
 # Load preprocessing information
 preprocessing_information = pd.read_csv('normalizaton_stats.csv')
