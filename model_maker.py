@@ -1,76 +1,61 @@
 import pandas as pd
-
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+import joblib
+from preprocessing_utils import *
+# Load and preprocess the data
+print("Loading data...")
 data = pd.read_csv("training_dataset_adobe_191_days.csv")
-data["date"] = pd.to_datetime(data['date_collection'], format="%Y%m%d")
-data.sort_values(by='date', inplace=True)
-data.reset_index(drop=True, inplace=True)
-data['mean_price'] = data[['open', 'low', 'high', 'close']].mean(axis=1)
 
-target = (data["mean_price"].shift(-1) / data["mean_price"] - 1)*100
+
+data = preprocess_data(data)
+
+target = (data["mean_price"].shift(-1) / data["mean_price"] - 1) * 100
 target.fillna(0, inplace=True)
 
-data['weekday'] = data['date'].dt.dayofweek
+# Select features
+print("Selecting features...")
+data_selected = select_features(data)
+print(f"Selected features:\n{data_selected.head()}")
 
-data["price_change_1"] = data["mean_price"] / data["mean_price"].shift(1)
-data.fillna({'price_change_1': 1}, inplace=True)
+# Save normalization statistics
+print("Saving normalization statistics...")
+save_statistics(data_selected)
 
-data["price_change_3"] = data["mean_price"] / data["mean_price"].shift(3)
-data.fillna({'price_change_1': 1}, inplace=True)
+# Normalize the data
+print("Normalizing data...")
+data_normalized = normalize(data_selected)
+print(f"Normalized data sample:\n{data_normalized.head()}")
 
-data.fillna(0.0, inplace=True)
-# Drop any date-related columns explicitly
-date_columns = data.filter(like='date').columns
-data.drop(columns=date_columns, inplace=True)
-features = []
-needed_unique = 5
+# Sort columns alphabetically
+print("Sorting columns alphabetically...")
+data_normalized = data_normalized.reindex(sorted(data_normalized.columns), axis=1)
+print(f"Sorted normalized data sample:\n{data_normalized.head()}")
 
+# Split the data
+print("Splitting data into train and test sets...")
+X_train, X_test, y_train, y_test = train_test_split(data_normalized, target, test_size=0.1, random_state=42)
+print(f"Training data sample:\n{X_train.head()}")
+print(f"Training target sample:\n{y_train.head()}")
+print(f"Test data sample:\n{X_test.head()}")
+print(f"Test target sample:\n{y_test.head()}")
 
-for column in data.columns[1:]:
-    if pd.to_numeric(data[column], errors='coerce').notnull().all():
-        data[column] = pd.to_numeric(data[column])
-        if data[column].nunique() >= needed_unique:  
-            features.append(column)
+# Define the model pipeline
+print("Defining the model pipeline...")
+model_pipeline = Pipeline(steps=[
+    ('normalize', FunctionTransformer(normalize, validate=False)),
+    ('regressor', LinearRegression())
+])
 
-data_features = data[features]
+# Fit the model pipeline
+print("Fitting the model pipeline...")
+model_pipeline.fit(X_train, y_train)
+print("Model training completed.")
 
-def create_statistics_csv(original_df, output_csv_path):
-    statistics = {
-        'Column Name': [],
-        'Mean': [],
-        'Max': [],
-        'Min': []
-    }
-
-    for column in original_df.columns:
-        statistics['Column Name'].append(column)
-        statistics['Mean'].append(f"{original_df[column].mean()}")
-        statistics['Max'].append(f"{original_df[column].max()}")
-        statistics['Min'].append(f"{original_df[column].min()}")
-
-    statistics_df = pd.DataFrame(statistics)
-    statistics_df.to_csv(output_csv_path, index=False)
-create_statistics_csv(data_features, 'normalizaton_stats.csv')
-
-# data_features = data_features.sub(data_features.mean(axis=0), axis=1).div((data_features.max(axis=0)-data_features.min(axis=0)), axis=1)
-#sort columns alphabetically
-data_features = data_features.reindex(sorted(data_features.columns), axis=1)
-#data_features.to_csv('data_features_from_model_maker.csv', index=False)
-
-
-
-from sklearn.model_selection import train_test_split
-features = data_features
-X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.1, random_state=42)
-
-from sklearn.linear_model import LinearRegression
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-import joblib
+# Save the model
 today = pd.Timestamp.now().strftime("%Y%m%d")
 model_name = f"model_{today}_LR.pkl"
-joblib.dump(model, f'{model_name}')
-
-#features["target"] = target
-#features.to_csv('data_used_for_training.csv', index=False)
-
+joblib.dump(model_pipeline, model_name)
+print(f"Model saved as {model_name}")
