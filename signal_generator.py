@@ -13,6 +13,8 @@ df_stocks = pd.read_csv('tracked_stocks.csv')
 buy_threshold = 0.5
 sell_threshold = -0.5
 
+buy_sell_dict = {}
+
 for index, row in df_stocks.iterrows():
     name = row['name']
     path = 'Stocks/' + name + '/'
@@ -30,4 +32,14 @@ for index, row in df_stocks.iterrows():
     prediction = model.predict(current_day)
     print(f"Prediction for {name}: {prediction[0]}")
 
+    if prediction[0] > buy_threshold:
+        buy_sell_dict[name] = 'Buy'
+    elif prediction[0] < sell_threshold:
+        buy_sell_dict[name] = 'Sell'
+    else:
+        buy_sell_dict[name] = 'Hold'
+
+#save the buy_sell_dict as csv file
+df_buy_sell = pd.DataFrame(buy_sell_dict.items(), columns=['name', 'action'])
+df_buy_sell.to_csv('buy_sell.csv', index=False)
     
