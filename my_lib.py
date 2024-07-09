@@ -2,7 +2,59 @@ import os
 import requests
 from transformers import BertTokenizer, BertForSequenceClassification, pipeline
 import pandas as pd
+import matplotlib.pyplot as plt
 
+def plot_depot(depot, name,path):
+    plt.cla()
+    plt.clf()
+    plt.close()
+    plt.figure(figsize=(10, 6))
+
+    plt.plot(depot['date'], depot["holding"], label='Holding', marker='o', color='blue')
+    plt.plot(depot['date'], depot["depot_value"], label='Using SPAI', marker='x', color='purple')
+
+    buy_label_added = False
+    sell_label_added = False
+
+    for index, row in depot.iterrows():
+        if row['flag'] == 'Buy':
+            if not buy_label_added:
+                plt.bar(row['date'], height=0.1, bottom=row["holding"] - 0.05, color='green', width=1, alpha=0.5, label ="buy")
+                buy_label_added = True
+            else:
+                plt.bar(row['date'], height=0.1, bottom=row["holding"] - 0.05, color='green', width=1, alpha=0.5)
+        elif row['flag'] == 'Sell':
+            if not sell_label_added:
+                plt.bar(row['date'], height=0.1, bottom=row["holding"] - 0.05, color='red', width=1, alpha=0.5, label = "sell")
+                sell_label_added = True
+            else:
+                plt.bar(row['date'], height=0.1, bottom=row["holding"] - 0.05, color='red', width=1, alpha=0.5)
+    plt.title(name)
+    plt.xlabel('Datum')
+    plt.ylabel('Depotwert nach Start bei 1000 €')
+    plt.legend()
+    plt.xticks(depot['date'][::10], rotation=45)
+    plt.tight_layout()
+    plt.savefig(path + 'depot.png')
+    print(f"Depot plot saved to {path + 'depot.png'}")
+
+
+
+def buy_stock(cash,stocks,trade_cost):
+    if cash > 0:
+        cash -= trade_cost
+        stocks += cash
+        cash = 0
+    return cash, stocks
+
+def sell_stock(cash,stocks,trade_cost):
+    if stocks > 0:
+        cash += stocks
+        cash -= trade_cost
+        stocks = 0
+    return cash, stocks
+
+    
 def get_news(topic: str, date: str,api_key:str):
     """
     Get news articles based on a given topic and date.
@@ -182,6 +234,22 @@ def normalize(df):
     return (df - mean) / max_min_diff
 
 def preprocess_data(data):
+    ###
+    # Convert date to datetime format
+    # Try different date formats
+    # Sort data by date
+    # Calculate mean price
+    # Calculate target
+    # Calculate weekday
+    # Calculate price change 1
+    # Calculate price change 3
+    # Drop any date-related columns
+    # Sort columns alphabetically
+    # Drop any columns that are not numeric
+    # Drop any columns with less than 2 unique values
+    # Fill NaN values with 0
+    ###
+
     for fmt in ('%Y-%m-%d', '%Y%m%d'):
         try:
             data["date"] = pd.to_datetime(data['date_collection'], format=fmt)
@@ -211,12 +279,16 @@ def preprocess_data(data):
     data.fillna(0.0, inplace=True)
     # Drop any date-related columns explicitly
     data.drop(columns=data.filter(like='date').columns, inplace=True)
-    return data
 
-def normalize_with_stats(data_features,preprocessing_information):
-    data_features = data_features.sub(preprocessing_information.set_index('Column Name')['Mean'], axis=1)
-    data_features = data_features.div(preprocessing_information.set_index('Column Name')['Max'] - preprocessing_information.set_index('Column Name')['Min'], axis=1)
-    return data_features
+    features = []
+    needed_unique = 2
+    for column in data.columns[1:]:
+        if pd.to_numeric(data[column], errors='coerce').notnull().all():
+            data[column] = pd.to_numeric(data[column])
+            if data[column].nunique() >= needed_unique:
+                features.append(column)
+    return data[features]
+
 
 def select_features(df):
     features = []

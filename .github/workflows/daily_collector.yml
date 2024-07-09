@@ -42,16 +42,15 @@ jobs:
         git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
 
-    - name: Run signal_generator.py and depot_manager.py
+    - name: Run predict_and_trade.py
       run: |
-        python signal_generator.py
-        python depot_manager.py
+        python predict_and_trade.py
 
     - name: Commit and Push Signals with AccessToken
       run: |
         git config --global user.name 'ActionBot'
         git config --global user.email 'luca.burghard@web.de'
         git add .
-        git commit -m "Buy or Sell Signal calculated"
+        git commit -m "Buy or Sell Signal calculated and executed."
         git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
