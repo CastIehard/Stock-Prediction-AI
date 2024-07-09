@@ -16,7 +16,7 @@ for index, row in df_stocks.iterrows():
     data = pd.read_csv(path + 'data.csv')
 
     price_change = data["close"].iloc[-1] / data["close"].iloc[-2]
-    print("Price Change is: " + price_change)
+    print(f"Price Change is: {price_change}")
 
     #create a file called depot.csv if it does not exist
     try:
