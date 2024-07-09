@@ -24,9 +24,11 @@ for index, row in df_stocks.iterrows():
         old_data = True
         cash = depot['cash'].iloc[-1]
         stock = depot['stock'].iloc[-1]*price_change
+        holding = depot['holding'].iloc[-1]*price_change
     except:
         cash = 500
         stock = 500
+        holding = 1000
         old_data = False
 
     date = data['date_collection'].iloc[-1]
@@ -40,11 +42,13 @@ for index, row in df_stocks.iterrows():
     depot_value = cash + stock
     #add variables to one df rntry at the last row
         # Create a new dataframe entry
+    
     new_entry = pd.DataFrame({
         'date': [date],
         'cash': [cash],
         'stock': [stock],
         'depot_value': [depot_value],
+        'holding': [holding],
         'flag': [flag]
     })
 

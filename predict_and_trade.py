@@ -104,7 +104,11 @@ for index, row in df_stocks.iterrows():
 
     print(f"Updated depot for {name} on {date} with cash: {cash}, stock: {stock}, depot value: {depot_value}")
 
+    #plot
+    my_lib.plot_depot(depot, name, path)
+
 print("Depot simulation completed.")
+
 
     
 
