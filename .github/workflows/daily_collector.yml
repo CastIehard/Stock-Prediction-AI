@@ -27,7 +27,21 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-
+    - name: Run collector.py
+      env:
+        ALPHA_API_KEY: ${{ secrets.ALPHA_API_KEY }}
+        NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+      run: python collector.py
+      
+    - name: Commit and Push with AccessToken
+      run: |
+        git config --global user.name 'ActionBot'
+        git config --global user.email 'luca.burghard@web.de'
+        git add .
+        git commit -m "Daily Collection"
+        git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
+        git push
+        
     - name: Run predict_and_trade.py
       run: |
         python predict_and_trade.py
