@@ -33,7 +33,7 @@ def plot_depot(depot, name,path):
     plt.xlabel('Datum')
     plt.ylabel('Depotwert nach Start bei 1000 €')
     plt.legend()
-    plt.xticks(depot['date'][::10], rotation=45)
+    plt.xticks(depot['date'][::1], rotation=45)
     plt.tight_layout()
     plt.savefig(path + 'depot.png')
     print(f"Depot plot saved to {path + 'depot.png'}")
