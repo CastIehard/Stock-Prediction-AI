@@ -79,9 +79,9 @@ for index, row in df_stocks.iterrows():
     price = data['close'].iloc[-1]
 
     #check if its weekend
-    date = datetime.strptime(date, '%Y-%m-%d')
+    date_modify = datetime.strptime(date, '%Y-%m-%d')
     #check if its saturday or sunday
-    if date.weekday() >= 5:
+    if date_modify.weekday() >= 5:
         action = 'Hold' #can only hold on weekends
 
     if action == 'Buy':
@@ -107,7 +107,7 @@ for index, row in df_stocks.iterrows():
         depot = new_entry
 
 
-
+    print(depot)
     depot.to_csv(path + 'depot.csv', index=False)
 
     print(f"Updated depot for {name} on {date} with cash: {cash}, stock: {stock}, depot value: {depot_value}")
