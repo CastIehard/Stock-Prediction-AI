@@ -38,8 +38,6 @@ def plot_depot(depot, name,path):
     plt.savefig(path + 'depot.png')
     print(f"Depot plot saved to {path + 'depot.png'}")
 
-
-
 def buy_stock(cash,stocks,trade_cost):
     if cash > 0:
         cash -= trade_cost

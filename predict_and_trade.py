@@ -17,7 +17,6 @@ for index, row in df_stocks.iterrows():
     ticker = row['ticker']
     ceo = row['ceo']
     print(f'Predict and trade {name}')
-
     path = 'Stocks/' + name + '/'
 
     data = pd.read_csv(path + 'data.csv')
@@ -78,6 +77,12 @@ for index, row in df_stocks.iterrows():
 
     date = data['date_collection'].iloc[-1]
     price = data['close'].iloc[-1]
+
+    #check if its weekend
+    date = datetime.strptime(date, '%Y-%m-%d')
+    #check if its saturday or sunday
+    if date.weekday() >= 5:
+        action = 'Hold' #can only hold on weekends
 
     if action == 'Buy':
         cash, stock = my_lib.buy_stock(cash, stock,trade_cost)
