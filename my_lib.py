@@ -4,11 +4,17 @@ from transformers import BertTokenizer, BertForSequenceClassification, pipeline
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot_depot(depot, name,path):
+import matplotlib.pyplot as plt
+
+def plot_depot(depot, name, path):
     plt.cla()
     plt.clf()
     plt.close()
     plt.figure(figsize=(10, 6))
+
+    # Convert dates to strings if they are not already
+    if not isinstance(depot['date'].iloc[0], str):
+        depot['date'] = depot['date'].astype(str)
 
     plt.plot(depot['date'], depot["holding"], label='Holding', marker='o', color='blue')
     plt.plot(depot['date'], depot["depot_value"], label='Using SPAI', marker='x', color='purple')
@@ -19,16 +25,17 @@ def plot_depot(depot, name,path):
     for index, row in depot.iterrows():
         if row['flag'] == 'Buy':
             if not buy_label_added:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.01, alpha=0.5, label ="buy")
+                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.1, alpha=0.5, label="buy")
                 buy_label_added = True
             else:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.01, alpha=0.5)
+                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.1, alpha=0.5)
         elif row['flag'] == 'Sell':
             if not sell_label_added:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.01, alpha=0.5, label = "sell")
+                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.1, alpha=0.5, label="sell")
                 sell_label_added = True
             else:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.01, alpha=0.5)
+                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.1, alpha=0.5)
+
     plt.title(name)
     plt.xlabel('Datum')
     plt.ylabel('Depotwert nach Start bei 1000 €')
@@ -37,6 +44,7 @@ def plot_depot(depot, name,path):
     plt.tight_layout()
     plt.savefig(path + 'depot.png')
     print(f"Depot plot saved to {path + 'depot.png'}")
+
 
 def buy_stock(cash,stocks,trade_cost):
     if cash > 0:
