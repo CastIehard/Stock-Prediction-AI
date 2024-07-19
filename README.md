@@ -1,7 +1,8 @@
 # Stock Prediction AI
 
-Stock Prediction AI is a proof-of-concept program designed to demonstrate that the stock market is not entirely unpredictable. This program downloads stock data for specified stocks and uses machine learning to predict the stock's performance (in terms of percentage change) for the next day. It employs seven different AI models to provide insights and validate predictions.
+Stock Prediction AI is a proof-of-concept program designed to demonstrate that the stock market is not entirely unpredictable.
 
+Please note, that the Program is not able to trade on weekends. So the flag is always set to hold. 
 ## Current Status of Adobe Stock Prediction
 ![Depot](Stocks/Adobe/depot.png)
 ## Current Status of Verizon Stock Prediction
