@@ -26,6 +26,8 @@ for index, row in df_stocks.iterrows():
         
     #do data preprocessing
     data = my_lib.preprocess_data(data)
+    #drop close calue becaue we dont know it yet and want to buy or sell with this value. This means we need to do the calculation in late evening view minutes before close and then do the action
+    data = data.drop('close', axis=1)
     #add target column
     target = (data["mean_price"].shift(-1) / data["mean_price"] - 1) * 100
     #standardize the data
@@ -47,16 +49,6 @@ for index, row in df_stocks.iterrows():
     print(f"Prediction for {name}: {prediction[0]}")
     prediction = prediction[0]
 
-    if prediction > BUY_THRESHOLD:
-        action = 'Buy'
-    elif prediction < SELL_THRESHOLD:
-        action = 'Sell'
-    else:
-        action = 'Hold'
-    
-    print(f"Action for {name}: {action}")
-
-
     #reload data because we removed the last day
     data = pd.read_csv(path + 'data.csv')
 
@@ -71,7 +63,6 @@ for index, row in df_stocks.iterrows():
         stock = depot['stock'].iloc[-1]*price_change
         holding = depot['holding'].iloc[-1]*price_change
         last_prediction = depot['prediction'].iloc[-1]
-        second_last_prediction = depot['prediction'].iloc[-2]
     except:
         cash = 500
         stock = 500
@@ -84,15 +75,27 @@ for index, row in df_stocks.iterrows():
     #check if its weekend
     date_modify = datetime.strptime(date, '%Y-%m-%d')
     #check if its saturday or sunday
-    if date_modify.weekday() >= 5:
-        action = 'Hold' #can only hold on weekends
-
-    #check if its monday
-    if date_modify.weekday() == 0:
+    
+    if date_modify.weekday() == 0 or date_modify.weekday() == 6:
         #could not sell on weekend so check what the prediction was on Saturday and Sunday and take the mean with today's prediction
-        if old_data:
-            prediction = (prediction + last_prediction + second_last_prediction) / 3
-            print(f"Updated prediction for {name} on {date} with: {prediction} because it is Monday and we could not sell on weekend")
+        prediction = (prediction + last_prediction) / 2
+        print(f"Updated prediction for {name} on {date} with: {prediction} because it is Monday or Sunday and we could not sell or buy then")
+
+    if date_modify.weekday() >= 5:
+        action = 'Hold'
+
+    elif prediction > BUY_THRESHOLD:
+        action = 'Buy'
+
+    elif prediction < SELL_THRESHOLD:
+        action = 'Sell'
+
+    else:
+        action = 'Hold'
+
+    
+    print(f"Action for {name}: {action}")
+
 
     if action == 'Buy':
         cash, stock = my_lib.buy_stock(cash, stock,TRADE_COST)
