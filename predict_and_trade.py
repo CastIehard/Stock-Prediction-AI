@@ -6,9 +6,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-training_amount = 50
-buy_threshold = 0.5
-sell_threshold = -0.5
+TRAINING_AMOUNT = 14
+BUY_THRESHOLD = 0.5
+SELL_THRESHOLD = -0.5
+TRADE_COST = 1
 
 df_stocks = pd.read_csv('tracked_stocks.csv')
 
@@ -20,9 +21,8 @@ for index, row in df_stocks.iterrows():
     path = 'Stocks/' + name + '/'
 
     data = pd.read_csv(path + 'data.csv')
-    #get the last 50 entries
-    if len(data) > training_amount:
-        data = data.iloc[-training_amount:]
+    if len(data) > TRAINING_AMOUNT:
+        data = data.iloc[-TRAINING_AMOUNT:]
         
     #do data preprocessing
     data = my_lib.preprocess_data(data)
@@ -45,17 +45,18 @@ for index, row in df_stocks.iterrows():
     #predict the next day
     prediction = model.predict(todays_data)
     print(f"Prediction for {name}: {prediction[0]}")
+    prediction = prediction[0]
 
-    if prediction[0] > buy_threshold:
+    if prediction > BUY_THRESHOLD:
         action = 'Buy'
-    elif prediction[0] < sell_threshold:
+    elif prediction < SELL_THRESHOLD:
         action = 'Sell'
     else:
         action = 'Hold'
     
     print(f"Action for {name}: {action}")
 
-    trade_cost = 1
+
     #reload data because we removed the last day
     data = pd.read_csv(path + 'data.csv')
 
@@ -77,7 +78,7 @@ for index, row in df_stocks.iterrows():
 
     date = data['date_collection'].iloc[-1]
     price = data['close'].iloc[-1]
-
+    
     #check if its weekend
     date_modify = datetime.strptime(date, '%Y-%m-%d')
     #check if its saturday or sunday
@@ -85,9 +86,9 @@ for index, row in df_stocks.iterrows():
         action = 'Hold' #can only hold on weekends
 
     if action == 'Buy':
-        cash, stock = my_lib.buy_stock(cash, stock,trade_cost)
+        cash, stock = my_lib.buy_stock(cash, stock,TRADE_COST)
     elif action == 'Sell':
-        cash, stock = my_lib.sell_stock(cash, stock,trade_cost)
+        cash, stock = my_lib.sell_stock(cash, stock,TRADE_COST)
 
     depot_value = cash + stock
     #add variables to one df rntry at the last row
