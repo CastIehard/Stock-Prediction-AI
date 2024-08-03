@@ -70,6 +70,8 @@ for index, row in df_stocks.iterrows():
         cash = depot['cash'].iloc[-1]
         stock = depot['stock'].iloc[-1]*price_change
         holding = depot['holding'].iloc[-1]*price_change
+        last_prediction = depot['prediction'].iloc[-1]
+        second_last_prediction = depot['prediction'].iloc[-2]
     except:
         cash = 500
         stock = 500
@@ -84,6 +86,13 @@ for index, row in df_stocks.iterrows():
     #check if its saturday or sunday
     if date_modify.weekday() >= 5:
         action = 'Hold' #can only hold on weekends
+
+    #check if its monday
+    if date_modify.weekday() == 0:
+        #could not sell on weekend so check what the prediction was on Saturday and Sunday and take the mean with today's prediction
+        if old_data:
+            prediction = (prediction + last_prediction + second_last_prediction) / 3
+            print(f"Updated prediction for {name} on {date} with: {prediction} because it is Monday and we could not sell on weekend")
 
     if action == 'Buy':
         cash, stock = my_lib.buy_stock(cash, stock,TRADE_COST)
