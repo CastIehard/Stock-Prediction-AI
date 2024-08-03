@@ -78,7 +78,7 @@ for index, row in df_stocks.iterrows():
 
     date = data['date_collection'].iloc[-1]
     price = data['close'].iloc[-1]
-    
+
     #check if its weekend
     date_modify = datetime.strptime(date, '%Y-%m-%d')
     #check if its saturday or sunday
@@ -99,7 +99,8 @@ for index, row in df_stocks.iterrows():
         'stock': [stock],
         'depot_value': [depot_value],
         'holding' : [holding],
-        'flag': [action]
+        'flag': [action],
+        'prediction': [prediction]
     })
 
     if old_data:
