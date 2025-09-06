@@ -1,5 +1,5 @@
 import pandas as pd
-import my_lib
+from utils import preprocess_data, buy_stock, sell_stock, plot_depot
 from datetime import datetime, timedelta
 import os
 from sklearn.linear_model import LinearRegression
@@ -25,7 +25,7 @@ for index, row in df_stocks.iterrows():
         data = data.iloc[-TRAINING_AMOUNT:]
         
     #do data preprocessing
-    data = my_lib.preprocess_data(data)
+    data = preprocess_data(data)
     #drop close calue becaue we dont know it yet and want to buy or sell with this value. This means we need to do the calculation in late evening view minutes before close and then do the action
     data = data.drop('close', axis=1)
     #add target column
@@ -98,9 +98,9 @@ for index, row in df_stocks.iterrows():
 
 
     if action == 'Buy':
-        cash, stock = my_lib.buy_stock(cash, stock,TRADE_COST)
+        cash, stock = buy_stock(cash, stock,TRADE_COST)
     elif action == 'Sell':
-        cash, stock = my_lib.sell_stock(cash, stock,TRADE_COST)
+        cash, stock = sell_stock(cash, stock,TRADE_COST)
 
     depot_value = cash + stock
     #add variables to one df rntry at the last row
@@ -127,7 +127,7 @@ for index, row in df_stocks.iterrows():
     print(f"Updated depot for {name} on {date} with cash: {cash}, stock: {stock}, depot value: {depot_value}")
 
     #plot
-    my_lib.plot_depot(depot, name, path)
+    plot_depot(depot, name, path)
 
 print("Depot simulation completed.")
 

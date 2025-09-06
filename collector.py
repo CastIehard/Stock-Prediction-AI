@@ -1,5 +1,5 @@
 import pandas as pd
-import my_lib
+from utils import download_finbert, get_news, list_finbert, get_stock_info
 from datetime import datetime,timedelta
 import os
 
@@ -9,7 +9,7 @@ ALPHA_API_KEY = os.environ.get('ALPHA_API_KEY')
 df_stocks = pd.read_csv('tracked_stocks.csv')
 
 finbert_path  = '.venv/Transformer/'
-my_lib.download_finbert(finbert_path)
+download_finbert(finbert_path)
 
 for index, row in df_stocks.iterrows():
     name = row['name']
@@ -28,20 +28,20 @@ for index, row in df_stocks.iterrows():
     df_collected['date_collection'] = [yesterday]
 
     #get News and sentiment about company
-    news_list, amount = my_lib.get_news(name, yesterday, NEWS_API_KEY)
+    news_list, amount = get_news(name, yesterday, NEWS_API_KEY)
     df_collected['amount_news_name'] = [amount]
-    sentiment = my_lib.list_finbert(news_list, finbert_path)
+    sentiment = list_finbert(news_list, finbert_path)
     df_collected['sentiment_name'] = [sentiment]
     
     #get News and sentiment about CEO
-    news_list, amount = my_lib.get_news(ceo, yesterday, NEWS_API_KEY)
+    news_list, amount = get_news(ceo, yesterday, NEWS_API_KEY)
     df_collected['amount_news_ceo'] = [amount]
-    sentiment = my_lib.list_finbert(news_list, finbert_path)
+    sentiment = list_finbert(news_list, finbert_path)
     df_collected['sentiment_ceo'] = [sentiment]
 
     #get the stock data
     yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y%m%d')
-    df_stock_data = my_lib.get_stock_info(ticker, ALPHA_API_KEY, yesterday)
+    df_stock_data = get_stock_info(ticker, ALPHA_API_KEY, yesterday)
 
     #check if api limit reached if df contains "API rate limit reached"
     if "API rate limit reached" in df_stock_data.columns:

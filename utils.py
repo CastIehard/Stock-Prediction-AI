@@ -16,31 +16,38 @@ def plot_depot(depot, name, path):
     if not isinstance(depot['date'].iloc[0], str):
         depot['date'] = depot['date'].astype(str)
 
-    plt.plot(depot['date'], depot["holding"], label='Holding', marker='o', color='blue')
-    plt.plot(depot['date'], depot["depot_value"], label='Using SPAI', marker='x', color='purple')
+    plt.plot(depot['date'], depot["holding"], label='Holding', color='blue')
+    plt.plot(depot['date'], depot["depot_value"], label='Using SPAI', color='purple')
 
-    buy_label_added = False
-    sell_label_added = False
+    # Create separate arrays for buy/sell points
+    buy_dates = []
+    buy_values = []
+    sell_dates = []
+    sell_values = []
 
     for index, row in depot.iterrows():
         if row['flag'] == 'Buy':
-            if not buy_label_added:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.1, alpha=0.5, label="buy")
-                buy_label_added = True
-            else:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='green', width=0.1, alpha=0.5)
+            buy_dates.append(row['date'])
+            buy_values.append(row["depot_value"])
         elif row['flag'] == 'Sell':
-            if not sell_label_added:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.1, alpha=0.5, label="sell")
-                sell_label_added = True
-            else:
-                plt.bar(row['date'], height=3, bottom=row["holding"] - 1.5, color='red', width=0.1, alpha=0.5)
+            sell_dates.append(row['date'])
+            sell_values.append(row["depot_value"])
+
+    # Plot buy and sell points as X markers
+    if buy_dates:
+        plt.scatter(buy_dates, buy_values, color='green', marker='o', s=15, label='Buy', zorder=5)
+    if sell_dates:
+        plt.scatter(sell_dates, sell_values, color='red', marker='o', s=15, label='Sell', zorder=5)
 
     plt.title(name)
     plt.xlabel('Datum')
     plt.ylabel('Depotwert nach Start bei 1000 €')
     plt.legend()
-    plt.xticks(depot['date'][::1], rotation=45)
+    
+    # Show only 10 evenly spaced x-axis dates
+    step = max(1, len(depot) // 9)  # 9 intervals for 10 points
+    plt.xticks(depot['date'][::step], rotation=45)
+    
     plt.tight_layout()
     plt.savefig(path + 'depot.png')
     print(f"Depot plot saved to {path + 'depot.png'}")
