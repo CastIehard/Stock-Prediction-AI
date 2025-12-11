@@ -2,7 +2,7 @@ name: Collect data every day at 1 a.m and Push Changes
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # Schedule to run daily at 1 a.m. UTC
+  #  - cron: '0 1 * * *'  # Schedule to run daily at 1 a.m. UTC
   workflow_dispatch:  # Make the workflow manually runnable
 
 permissions:
